@@ -24,7 +24,6 @@ pyvenv.cfg
 .env.local
 .env.*.local
 secrets.py
-mysite/settings.py
 
 .DS_Store
 Thumbs.db
