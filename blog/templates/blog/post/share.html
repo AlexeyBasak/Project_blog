@@ -1,19 +1,38 @@
 {% extends 'blog/base.html' %}
 
-{% block title %}
-  Share a post
-{% endblock %}
+{% block title %}Share a post{% endblock %}
 
 {% block content %}
-  {% if sent %}
-    <h1>E-mail successfully sent</h1>
-    <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.</p>
-  {% else %}
-    <h1>Share "{{ post.title }}" by e-mail</h1>
-    <form method="post" novalidate>
-      {{ form.as_p }}
-      {% csrf_token %}
-      <input type="submit" value="Send e-mail" />
-    </form>
-  {% endif %}
+    <div class="card">
+        <div class="card-body">
+            {% if sent %}
+                <div class="alert alert-success">
+                    <h1 class="h4">E-mail successfully sent</h1>
+                    <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.</p>
+                </div>
+            {% else %}
+                <h1 class="h4 mb-4">Share "{{ post.title }}" by e-mail</h1>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.to.label_tag }}
+                        {{ form.to|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.comments.label_tag }}
+                        {{ form.comments|add_class:"form-control" }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send e-mail</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
