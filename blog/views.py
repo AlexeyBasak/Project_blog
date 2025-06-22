@@ -1,14 +1,18 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views import View
 from blog.models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm, CommentForm
+from .forms import AddPostForm, EmailPostForm, CommentForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
-
+from django.views.generic import CreateView
+from django.utils import timezone
+from slugify import slugify 
 # class PostsListView(ListView):
 #     queryset = Post.published.all()
 #     context_object_name = 'posts'
@@ -114,3 +118,47 @@ def all_post_comments(request, post_slug):
     data = {"post": post, "comments": comments}
 
     return render(request, "blog/post/post_comments.html", context=data)
+
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('blog:post_list')
+
+    data = {
+        'post': post,
+    }
+    return render(request, 'blog/post/post_confirm_delete.html', context=data)
+
+class AddPost(View):
+    def get(self, request):
+        form = AddPostForm()
+        return render(request, 'blog/post/create_post.html', {'form': form})
+
+    def post(self, request):
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.slug = slugify(post.title)
+            post.created = timezone.now()
+            post.updated = timezone.now()
+            post.save()
+            form.save_m2m()
+            return redirect('blog:post_list')
+        
+        return render(request, 'blog/post/create_post.html', {'form': form})  
+    
+
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    post = comment.post
+    if request.method == 'POST':
+        comment.delete()
+        return redirect(post.get_absolute_url())
+
+    data = {
+        'comment': comment,
+    }
+    return render(request, 'blog/post/comment_confirm_delete.html', context=data)

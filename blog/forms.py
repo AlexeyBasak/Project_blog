@@ -1,5 +1,5 @@
 from django import forms
-from blog.models import Comment
+from blog.models import Comment, Post
 
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25)
@@ -12,3 +12,14 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['name', 'email', 'body']
+
+
+class AddPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'author', 'body']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+        

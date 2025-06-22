@@ -1,47 +1,45 @@
 {% extends 'blog/base.html' %}
 
-{% block title %}Share a post{% endblock %}
+{% block title %}
+  Share a post
+{% endblock %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            {% if sent %}
-                <div class="alert alert-success">
-                    <h1 class="h4">E-mail successfully sent</h1>
-                    <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.</p>
-                </div>
-            {% else %}
-                <h1 class="h4 mb-4">Share "{{ post.title }}" by e-mail</h1>
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
-                        <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" 
-                               class="form-control" value="{{ form.name.value|default_if_none:'' }}">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
-                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" 
-                               class="form-control" value="{{ form.email.value|default_if_none:'' }}">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.to.id_for_label }}" class="form-label">{{ form.to.label }}</label>
-                        <input type="email" name="{{ form.to.name }}" id="{{ form.to.id_for_label }}" 
-                               class="form-control" value="{{ form.to.value|default_if_none:'' }}">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.comments.id_for_label }}" class="form-label">{{ form.comments.label }}</label>
-                        <textarea name="{{ form.comments.name }}" id="{{ form.comments.id_for_label }}" 
-                                  class="form-control" rows="3">{{ form.comments.value|default_if_none:'' }}</textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Send e-mail</button>
-                </form>
-            {% endif %}
+  <div class="card">
+    <div class="card-body">
+      {% if sent %}
+        <div class="alert alert-success">
+          <h1 class="h4">E-mail successfully sent</h1>
+          <p>"{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.</p>
         </div>
+      {% else %}
+        <h1 class="h4 mb-4">Share "{{ post.title }}" by e-mail</h1>
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+            <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" class="form-control" value="{{ form.name.value|default_if_none:'' }}" />
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+            <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-control" value="{{ form.email.value|default_if_none:'' }}" />
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.to.id_for_label }}" class="form-label">{{ form.to.label }}</label>
+            <input type="email" name="{{ form.to.name }}" id="{{ form.to.id_for_label }}" class="form-control" value="{{ form.to.value|default_if_none:'' }}" />
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.comments.id_for_label }}" class="form-label">{{ form.comments.label }}</label>
+            <textarea name="{{ form.comments.name }}" id="{{ form.comments.id_for_label }}" class="form-control" rows="3">{{ form.comments.value|default_if_none:'' }}</textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Send e-mail</button>
+        </form>
+      {% endif %}
     </div>
+  </div>
 {% endblock %}

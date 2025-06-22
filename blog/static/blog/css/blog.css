@@ -1,97 +1,158 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: helvetica, sans-serif;
+/* Основные стили формы */
+.form-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-a {
-  color: #00abff;
-  text-decoration: none;
+.form-field {
+    margin-bottom: 1.5rem;
 }
 
-h1 {
-  font-weight: normal;
-  border-bottom: 1px solid #bbb;
-  padding: 0 0 10px 0;
+.form-field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
 }
 
-h2 {
-  font-weight: normal;
-  margin: 30px 0 0;
+.form-field input[type="text"],
+.form-field textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
-#content {
-  float: left;
-  width: 60%;
-  padding: 0 0 0 30px;
+.form-field textarea {
+    min-height: 150px;
+    resize: vertical;
 }
 
-#sidebar {
-  float: right;
-  width: 30%;
-  padding: 10px;
-  background: #efefef;
-  height: 100%;
+/* Кнопки */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
-p.date {
-  color: #ccc;
-  font-family: georgia, serif;
-  font-size: 12px;
-  font-style: italic;
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-
-.pagination {
-  margin: 40px 0;
-  font-weight: bold;
+.btn-primary {
+    background: #0d6efd;
+    color: white;
 }
 
-label {
-  float: left;
-  clear: both;
-  color: #333;
-  margin-bottom: 4px;
+.btn-secondary {
+    background: #6c757d;
+    color: white;
 }
 
-input,
-textarea {
-  clear: both;
-  float: left;
-  margin: 0 0 10px;
-  background: #ededed;
-  border: 0;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-
-input[type=submit] {
-  font-weight: bold;
-  background: #00abff;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-.errorlist {
-  color: #cc0033;
-  float: left;
-  clear: both;
-  padding-left: 10px;
-}
-
-/* comments */
-.comment {
-  padding: 10px;
-}
-
-.comment:nth-child(even) {
-  background: #efefef;
-}
-
-.comment .info {
-  font-weight: bold;
-  font-size: 12px;
-  color: #666;
-}
+.post-form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #444;
+    }
+    
+    input[type="text"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    
+    textarea {
+        min-height: 200px;
+        resize: vertical;
+    }
+    
+    .form-help-text {
+        font-size: 13px;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    .form-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .submit-button,
+    .cancel-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .submit-button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    .submit-button:hover {
+        background-color: #45a049;
+    }
+    
+    .cancel-button {
+        background-color: #f44336;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        line-height: normal;
+    }
+    
+    .cancel-button:hover {
+        background-color: #d32f2f;
+    }
+    
+    .error-message {
+        color: #d32f2f;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    .form-errors {
+        color: #d32f2f;
+        background-color: #fde8e8;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border: 1px solid #f5c2c7;
+    }
