@@ -19,7 +19,7 @@
   <div class="card mb-4">
     <div class="card-body">
       {% with total_comments=comments.count %}
-        <h2 class="h4">{{ total_comments }} Comments{{ total_comments|pluralize }}</h2>
+        <h2 class="h4">{{ total_comments }}Last comment{{ total_comments|pluralize }}</h2>
       {% endwith %}
 
       {% if comment %}
@@ -31,12 +31,9 @@
       {% else %}
         <p class="text-muted">There are no comments yet.</p>
       {% endif %}
-
-      {% if count > 1 %}
-        <p>
-          <a href="{% url 'blog:all_post_comments' post.slug %}" class="btn btn-sm btn-outline-secondary">Show all comments</a>
-        </p>
-      {% endif %}
+      <p>
+        <a href="{% url 'blog:all_post_comments' post.slug %}" class="btn btn-sm btn-outline-secondary">Show all comments</a>
+      </p>
     </div>
   </div>
   <div class="card mb-4">

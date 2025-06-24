@@ -23,3 +23,7 @@ class AddPostForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
         
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
+

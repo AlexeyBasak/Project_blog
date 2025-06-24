@@ -15,8 +15,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-fallback-key-for-dev-only")
-DEBUG = os.getenv("DEBUG", "False") == "True"
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
+    'django.contrib.postgres',
     "blog",
     "taggit",
 ]
@@ -75,7 +76,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'blog',
         'USER': 'name',
-        'PASSWORD': 'django',
+        'PASSWORD': os.getenv("PASSWORD_DB", ""),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

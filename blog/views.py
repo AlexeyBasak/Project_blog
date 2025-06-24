@@ -5,14 +5,22 @@ from django.views import View
 from blog.models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import AddPostForm, EmailPostForm, CommentForm
+from .forms import AddPostForm, EmailPostForm, CommentForm, SearchForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
 from django.views.generic import CreateView
 from django.utils import timezone
-from slugify import slugify 
+from slugify import slugify
+from django.contrib.postgres.search import (
+    SearchVector,
+    SearchQuery,
+    SearchRank,
+    TrigramSimilarity,
+)
+
+
 # class PostsListView(ListView):
 #     queryset = Post.published.all()
 #     context_object_name = 'posts'
@@ -59,11 +67,19 @@ def post_detail(request, year, month, day, post):
     count = p.comments.count()
 
     form = CommentForm()
-    post_tags_ids = p.tags.values_list('id', flat=True)
+    post_tags_ids = p.tags.values_list("id", flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=p.id)
-    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:3]
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags", "-publish"
+    )[:3]
 
-    data = {"post": p, "comment": comment, "form": form, "count": count, 'similar_posts': similar_posts}
+    data = {
+        "post": p,
+        "comment": comment,
+        "form": form,
+        "count": count,
+        "similar_posts": similar_posts,
+    }
 
     return render(request, "blog/post/detail.html", context=data)
 
@@ -122,19 +138,20 @@ def all_post_comments(request, post_slug):
 
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         post.delete()
-        return redirect('blog:post_list')
+        return redirect("blog:post_list")
 
     data = {
-        'post': post,
+        "post": post,
     }
-    return render(request, 'blog/post/post_confirm_delete.html', context=data)
+    return render(request, "blog/post/post_confirm_delete.html", context=data)
+
 
 class AddPost(View):
     def get(self, request):
         form = AddPostForm()
-        return render(request, 'blog/post/create_post.html', {'form': form})
+        return render(request, "blog/post/create_post.html", {"form": form})
 
     def post(self, request):
         form = AddPostForm(request.POST)
@@ -145,20 +162,47 @@ class AddPost(View):
             post.updated = timezone.now()
             post.save()
             form.save_m2m()
-            return redirect('blog:post_list')
-        
-        return render(request, 'blog/post/create_post.html', {'form': form})  
-    
+            return redirect("blog:post_list")
+
+        return render(request, "blog/post/create_post.html", {"form": form})
 
 
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     post = comment.post
-    if request.method == 'POST':
+    if request.method == "POST":
         comment.delete()
         return redirect(post.get_absolute_url())
 
     data = {
-        'comment': comment,
+        "comment": comment,
     }
-    return render(request, 'blog/post/comment_confirm_delete.html', context=data)
+    return render(request, "blog/post/comment_confirm_delete.html", context=data)
+
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+
+    if "query" in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            # search_vector = SearchVector("title", weight='A') + SearchVector('body',  weight='B')
+            # search_query = SearchQuery(query)
+            # results = (
+            #     Post.published.annotate(
+            #         search=search_vector, rank=SearchRank(search_vector, search_query)
+            #     )
+            #     .filter(rank__gte=0.3)
+            #     .order_by("-rank")
+            # )
+            results = Post.published.annotate(similarity=TrigramSimilarity("title", query),).filter(similarity__gt=0.1).order_by("-similarity")
+
+    data = {
+        "form": form,
+        "query": query,
+        "results": results,
+    }
+    return render(request, "blog/post/search.html", context=data)

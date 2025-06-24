@@ -14,4 +14,5 @@ urlpatterns = [
     path('comment_delete/<int:comment_id>', views.delete_comment, name='comment_delete'),
     path('post_delete/<int:post_id>', views.delete_post, name='post_delete'),
     path('create/', views.AddPost.as_view(), name='add_post'),
+    path('search/',  views.post_search, name='post_search'),
 ]
